@@ -64,7 +64,7 @@ _push_image:
 # Will build the go based binaries
 # The binaries will be placed at $GOPATH/bin/
 #
-build: deps _install_trash _fetch_longhorn _build_longhorn _push_image
+build: deps _install_trash _fetch_longhorn _build_longhorn
 	@echo ""
 	@echo "INFO:\t..... run ci over jiva image"
 	@echo ""
