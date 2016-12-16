@@ -3,27 +3,23 @@ dist: trusty
 sudo: required
 install: true
 go:
-  - 1.7.1
+- 1.7.1
 env:
   global:
-    - GOARCH=amd64
-    - GO_FOR_RELEASE=1.7.1
+  - GOARCH=amd64
+  - GO_FOR_RELEASE=1.7.1
 before_install:
-  - sleep 15
-  - sudo apt-get install -y
-  - sudo apt-get install -y curl
-  - go env && pwd
-  - mkdir -p $HOME/gopath/bin
+- sleep 15
+- sudo apt-get install -y
+- sudo apt-get install -y curl
+- go env && pwd
+- mkdir -p $HOME/gopath/bin
 script:
-  - make build
+- make build
 deploy:
-   provider: releases
-  #api_key: "GITHUB OAUTH TOKEN"
-   user: "prateekpandey14 "
-   password: "@prateek1990"
-   file: "scripts"
-   skip_cleanup: true
-   on:
-     tags: true 
-  
-
+  provider: releases
+  api_key:
+    secure: vHXQDxB8CJ5epTQ7We2gza3KWEuN5Sq08Q/vffbLl1hvv0DOGpSsZaI48QlH+8bF0+9QBlSwSK5wfnCw2sRJQhKGILE41LPMinVvlLUmvnLKX8hP/fZWV1JNSTzpUQeGOgf9FrT0vtumpcEJPY5x2m6XqgOZXU6XHIIFaAMpqHdAckiuxXNoAxv4r0oSJDIfauXA71tID3RdzuskyaixGusHgnJXn/OxtvDJYfAmD2PhtJ+lL+nv/ptz+beKySYO1H0qiFsg6nghHHd0X8lPA7BQshU3jw02UtkdX9UuFWoVRGyDx3edEjTN1yIEjvtnHWwRYnK6KQGQNWO1jtNMquiXDbRhjKmaUCAeArQ8rPGDF8QWxC2fSVIKzbQtNHSzDjEQZL12SeDesZ4aX7aLkAS9ytUGA4gain2hmy8FxoFGv0kVzJo9PHzgrLpTSYJEiereYHK91D8AkH5BGFs+FS6CwjhsciSQw2xEa57uEGV8U3UrWBySVcyICo4ZAUAU0MpXcTO3323nW/ttFQceXSNtwu8H9kJZSd18vm2GcGMPtS3ULkGG5ihPBqNjlIJBMm/+7eQE/w7Sfn53TIbVg75HCkHYblv31LKv4M9099sHf3FJ2Wre3aTTPEIYL6Um9j3UdxMJ3TusiZjm0u6RTn8GrPWLv5hru5pLMKkMDBA=
+  file: package
+  on:
+    repo: prateekpandey14/jiva
