@@ -16,11 +16,14 @@ before_install:
   - mkdir -p $HOME/gopath/bin
 script:
   - make build
-notifications:
-  email:
-    recipients:
-      - kiran.mova@cloudbyte.com
-  webhooks:
-    urls:
-      - https://webhooks.gitter.im/e/d885a0beef16020c3878
+deploy:
+   provider: releases
+  #api_key: "GITHUB OAUTH TOKEN"
+   user: "prateekpandey14 "
+   password: "@prateek1990"
+   file: "pkg/"
+   skip_cleanup: true
+   on:
+     tags: true 
+  
 
