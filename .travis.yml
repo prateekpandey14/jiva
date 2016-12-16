@@ -21,7 +21,7 @@ deploy:
   #api_key: "GITHUB OAUTH TOKEN"
    user: "prateekpandey14 "
    password: "@prateek1990"
-   file: "package"
+   file: "scripts"
    skip_cleanup: true
    on:
      tags: true 
