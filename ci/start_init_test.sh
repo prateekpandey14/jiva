@@ -1,7 +1,14 @@
 #!/bin/bash
+sudo rm -rf /tmp/vol1/*
+sudo rm -rf /tmp/vol2/*
+sudo rm -rf /tmp/vol3/*
+
+docker stop $(docker ps -a -q)
+docker rm $(docker ps -a -q)
 
 # Get Docker image for Jiva
 JI=$(sudo docker images | grep openebs/jiva | awk '{print $1":"$2}')
+JI=openebs/jiva:dev-8269cf5
 echo "Run CI tests on $JI"
 
 # Prepare environment to run Jiva containers
@@ -20,6 +27,7 @@ sudo docker ps
 
 # Create a local mountpoint
 sudo mkdir -p /mnt/store
+sudo mkdir -p /mnt/store2
 
 # Cleanup existing iSCSI sessions
 sudo iscsiadm -m node -u
@@ -73,11 +81,11 @@ if [ "$x"!="" ]; then
         # TEST#2: Perform a random I/O workload test on Jiva Vol
         sudo mkdir -p /mnt/store/data
         sudo chown 777 /mnt/store/data
-        sudo docker run -v /mnt/store/data:/datadir1 openebs/tests-vdbench:latest
-        if [ $? -eq 0 ]; then echo "VDbench Test: PASSED"
-        else
-            echo "VDbench Test: FAILED";exit 1
-        fi
+        #sudo docker run -v /mnt/store/data:/datadir1 openebs/tests-vdbench:latest
+        #if [ $? -eq 0 ]; then echo "VDbench Test: PASSED"
+        #else
+        #    echo "VDbench Test: FAILED";exit 1
+        #fi
 
         # TEST#3: Run the libiscsi compliance suite on Jiva Vol
         sudo mkdir /mnt/logs
@@ -124,6 +132,7 @@ sudo docker ps
 curl http://172.18.0.5:9501/v1/volumes
 
 # Discover Jiva iSCSI target and Login
+sleep 5
 sudo iscsiadm -m discovery -t st -p 172.18.0.5:3260
 sudo iscsiadm -m node -l
 
@@ -137,7 +146,7 @@ i=0
 while [ -z $x ]; do
         sleep 4
         x=$(iscsiadm -m session -P 3 |grep -i "Attached scsi disk" | awk '{print $4}')
-        i=`expr $i+1`
+        i=`expr $i + 1`
         if [ $i -eq 5 ]; then
                 break
         else
@@ -147,10 +156,10 @@ done
 
 if [ "$x"!="" ]; then
 # Mount FS onto local mountpoint
-	sudo mount /dev/$x /mnt/store
+	sudo mount /dev/$x /mnt/store2
 
 	# TEST#1: Perform simple data-integrity check on Jiva Vol
-	hash3=$(sudo md5sum /mnt/store/file1 | awk '{print $1}')
+	hash3=$(sudo md5sum /mnt/store2/file1 | awk '{print $1}')
 	if [ $hash1 == $hash3 ]; then echo "DI Test: PASSED"
 	else
 		echo "DI Test: FAILED"; exit 1
